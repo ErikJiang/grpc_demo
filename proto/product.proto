@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/erikjiang/grpc_demo/proto";
+
+package proto;
+
+message UserRequest {
+    int32 user_id = 1;
+}
+
+message UserResponse {
+    int32 user_id = 1;
+    string user_name = 2;
+    string user_desc = 3;
+}
+
+service UserService {
+    rpc GetUserInfo(UserRequest) returns (UserResponse);
+}
