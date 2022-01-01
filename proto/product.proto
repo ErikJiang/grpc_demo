@@ -1,8 +1,8 @@
 syntax = "proto3";
-
+package proto;
 option go_package = "github.com/erikjiang/grpc_demo/proto";
 
-package proto;
+import "google/api/annotations.proto";
 
 message UserRequest {
     int32 user_id = 1;
@@ -15,5 +15,9 @@ message UserResponse {
 }
 
 service UserService {
-    rpc GetUserInfo(UserRequest) returns (UserResponse);
+    rpc GetUserInfo(UserRequest) returns (UserResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/{user_id}"
+        };
+    };
 }

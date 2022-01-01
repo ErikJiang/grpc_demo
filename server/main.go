@@ -2,14 +2,10 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
-	"github.com/erikjiang/grpc_demo/certs"
+	"github.com/erikjiang/grpc_demo/helper"
 	"github.com/erikjiang/grpc_demo/proto"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
-	"io/ioutil"
 	"log"
 	"net"
 )
@@ -29,24 +25,7 @@ func (us *UserService) GetUserInfo(ctx context.Context, in *proto.UserRequest) (
 
 func main() {
 	// 服务端双向认证设置:
-	// load server key & pem
-	cert, err := tls.LoadX509KeyPair(certs.Path("server/server.pem"), certs.Path("server/server.key"))
-	if err != nil {
-		log.Fatalf("load x509 cert file failed, err: %s\n", err.Error())
-	}
-	// create cert pool and  append ca pem
-	certPool := x509.NewCertPool()
-	ca, err := ioutil.ReadFile(certs.Path("ca/ca.pem"))
-	if err != nil {
-		log.Fatalf("read ca file failed, err: %s\n", err.Error())
-	}
-	certPool.AppendCertsFromPEM(ca)
-	// set credentials
-	creds := credentials.NewTLS(&tls.Config{
-		Certificates: []tls.Certificate{cert},
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    certPool,
-	})
+	creds := helper.GetServerCreds()
 
 	// 1. create grpc server (set credentials)
 	server := grpc.NewServer(grpc.Creds(creds))
