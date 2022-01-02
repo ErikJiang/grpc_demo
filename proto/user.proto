@@ -1,0 +1,86 @@
+syntax = "proto3";
+package proto;
+option go_package = "github.com/erikjiang/grpc_demo/proto";
+
+import "google/api/annotations.proto";
+import "models.proto";
+
+enum BankType {
+    ABC = 0;
+    BCM = 1;
+    BOC = 2;
+    CCB = 3;
+    CEB = 4;
+}
+
+message UserRequest {
+    int32 user_id = 1;
+    BankType bank = 2;
+}
+
+message UserResponse {
+    int32 user_id = 1;
+    string user_name = 2;
+    string user_desc = 3;
+}
+
+message UserCount {
+    int32 count = 1;
+}
+
+message UserList {
+    repeated UserResponse list = 1;
+}
+
+message UsersRequest {
+    repeated UserRequest users = 1;
+}
+
+message UsersResponse {
+    repeated UserDetail users = 1;
+}
+
+service UserService {
+    rpc GetUserInfo(UserRequest) returns (UserResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/{user_id}"
+        };
+    };
+
+    rpc GetUserDetail(UserRequest) returns (UserDetail) {
+        option(google.api.http) = {
+            get: "/v1/user/{user_id}/detail"
+        };
+    }
+
+    rpc GetUserList(UserCount) returns (UserList) {
+        option(google.api.http) = {
+            get: "/v1/user"
+        };
+    }
+
+    rpc GetUserScore(UsersRequest) returns (UsersResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/scores"
+        };
+    }
+    // ServerStream
+    rpc GetUserScoreByServerStream(UsersRequest) returns (stream UsersResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/scores_ss"
+        };
+    }
+    // ClientStream
+    rpc GetUserScoreByClientStream(stream UsersRequest) returns (UsersResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/scores_cs"
+        };
+    }
+    // BidirectionalStream
+    rpc GetUserScoreByBidirectionalStream(stream UsersRequest) returns (stream UsersResponse) {
+        option(google.api.http) = {
+            get: "/v1/user/scores_bs"
+        };
+    }
+
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+package proto;
+option go_package = "github.com/erikjiang/grpc_demo/proto";
+
+import "google/protobuf/timestamp.proto";
+
+message UserDetail {
+    int32 user_id = 1;
+    string user_name = 2;
+    string address = 3;
+    string company = 4;
+    int32 score = 5;
+    string bank = 6;
+    int32 balance = 7;
+    google.protobuf.Timestamp updated = 8;
+}
+
+message TeamDetail {
+    int32 team_id = 1;
+    string team_name = 2;
+    int32 member_num = 3;
+    string business = 4;
+    google.protobuf.Timestamp created = 5;
+}

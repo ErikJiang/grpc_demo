@@ -6,7 +6,7 @@ all: help
 
 .PHONY: help proto clean
 
-## proto	compiling proto file
+## proto	generate proto file
 proto:
 	@protoc -I proto --go_out proto \
 		--go_opt paths=source_relative \
@@ -15,7 +15,9 @@ proto:
 		--grpc-gateway_out proto \
 		--grpc-gateway_opt logtostderr=true \
 		--grpc-gateway_opt paths=source_relative \
-		proto/product.proto
+		proto/models.proto \
+		proto/user.proto \
+		proto/team.proto
 
 ## clean	clean proto file
 clean:

@@ -1,0 +1,47 @@
+syntax = "proto3";
+package proto;
+option go_package = "github.com/erikjiang/grpc_demo/proto";
+
+import "google/api/annotations.proto";
+import "models.proto";
+
+enum TeamLevel {
+    High = 0;
+    Middle = 1;
+    Low = 2;
+}
+
+message TeamRequest {
+    int32 team_id = 1;
+}
+
+message TeamResponse {
+    int32 team_id = 1;
+    string team_name = 2;
+    string team_desc = 3;
+    TeamLevel level = 4;
+}
+
+message AddRequest {
+    TeamDetail team = 1;
+}
+
+message AddResponse {
+    int32 status = 1;
+    string message = 2;
+}
+
+service TeamService {
+    rpc GetTeamInfo(TeamRequest) returns (TeamResponse) {
+        option(google.api.http) = {
+            get: "/v1/team/{team_id}"
+        };
+    };
+
+    rpc AddTeam(AddRequest) returns (AddResponse) {
+        option(google.api.http) = {
+            post: "/v1/team",
+            body: "team",
+        };
+    };
+}

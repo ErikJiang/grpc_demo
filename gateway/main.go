@@ -19,5 +19,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("register user service handler failed, err: %s\n", err.Error())
 	}
+	err = proto.RegisterTeamServiceHandlerFromEndpoint(ctx, mux, "localhost:8081", opts)
+	if err != nil {
+		log.Fatalf("register team service handler failed, err: %s\n", err.Error())
+	}
+
 	http.ListenAndServe("localhost:8080", mux)
 }
